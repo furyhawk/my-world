@@ -3,8 +3,11 @@ import {
     createAsyncThunk,
     createEntityAdapter,
 } from '@reduxjs/toolkit'
+import axios from 'axios'
 
-const axios = require('axios');
+const api = axios.create({
+    baseURL: "https://api.tvmaze.com/search"
+})
 
 const populationAdapter = createEntityAdapter({
     selectId: population => population.show.id
@@ -14,17 +17,36 @@ const populationAdapter = createEntityAdapter({
 export const fetchPopulation = createAsyncThunk(
     'population/fetchPopulation',
     async () => {
-        const response = await axios.get("https://api.tvmaze.com/search/shows?q=snow")
+        const response = await api.get("/shows?q=snow")
+        console.log(response)
         return response.population
     }
 )
 
 const populationSlice = createSlice({
     name: 'population',
-    initialState: populationAdapter.getInitialState(),
+    initialState: populationAdapter.getInitialState({
+        status: 'idle',
+        error: null,
+    }),
     reducers: {},
     extraReducers: {
-        [fetchPopulation.fulfilled]: populationAdapter.setAll,
+        [fetchPopulation.pending]: (state, action) => {
+            state.status = 'loading'
+            state.error = null
+        },
+        [fetchPopulation.fulfilled]: (state, action) => {
+            if (state.status === 'loading') {
+                populationAdapter.upsertMany(state, action)
+                state.status = 'succeeded'
+            }
+        },
+        [fetchPopulation.rejected]: (state, action) => {
+            if (state.status === 'loading') {
+                state.status = 'failed'
+                state.error = action.payload
+            }
+        }
     },
 })
 
