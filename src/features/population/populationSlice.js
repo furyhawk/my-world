@@ -3,32 +3,49 @@ import {
     createAsyncThunk,
     createEntityAdapter,
 } from '@reduxjs/toolkit'
-import axios from 'axios'
 
-const api = axios.create({
-    baseURL: "https://api.tvmaze.com/search"
-})
+const initialState = {
+    population: [],
+    status: 'idle',
+    error: null,
+}
+// const populationSlice = createSlice({
+//     name: 'population',
+//     initialState,
+//     reducers: {}
+// })
+// import axios from 'axios'
+
+// const api = axios.create({
+//     baseURL: "https://api.tvmaze.com/search"
+// })
+
+
 
 const populationAdapter = createEntityAdapter({
-    selectId: population => population.show.id
-}
-)
+    selectId: (population) => population.id,
+})
 
 export const fetchPopulation = createAsyncThunk(
     'population/fetchPopulation',
     async () => {
-        const response = await api.get("/shows?q=snow")
+        const response = await fetch(
+            `https://jsonplaceholder.typicode.com/todos`
+        );
+        // await api.get("/shows?q=snow")
         console.log(response)
-        return response.population
+        const data = await response.json();
+        return data
     }
 )
 
 const populationSlice = createSlice({
     name: 'population',
-    initialState: populationAdapter.getInitialState({
-        status: 'idle',
-        error: null,
-    }),
+    initialState,
+    // populationAdapter.getInitialState({
+    //     status: 'idle',
+    //     error: null,
+    // }),
     reducers: {},
     extraReducers: {
         [fetchPopulation.pending]: (state, action) => {
@@ -51,6 +68,8 @@ const populationSlice = createSlice({
 })
 
 export default populationSlice.reducer
+
+export const booksSelectors = populationAdapter.getSelectors((state) => state.population)
 
 export const {
     selectAll: selectAllPopulation,
