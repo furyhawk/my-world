@@ -1,8 +1,8 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import { PopulationTable } from './features/population/populationTable';
+import { useState } from 'react'
 import './App.css';
+import { Pokemon } from './features/pokemon/Pokemon'
+
+const pokemon = ['bulbasaur', 'pikachu', 'ditto', 'bulbasaur']
 
 function App() {
   // const getPop = async () => {
@@ -11,13 +11,21 @@ function App() {
   //   return r
   // }
   // console.log(getPop());
+  const [pollingInterval, setPollingInterval] = useState(0)
   return (
     <div className="App">
       <header className="App-header">
-        
-        {/* <Counter /> */}
-        <PopulationTable />
-        
+        <select
+          onChange={(change) => setPollingInterval(Number(change.target.value))}
+        >
+          <option value={0}>Off</option>
+          <option value={1000}>1s</option>
+          <option value={5000}>5s</option>
+        </select>
+        {pokemon.map((poke, index) => (
+          <Pokemon key={index} name={poke} pollingInterval={pollingInterval} />
+        ))}
+
       </header>
     </div>
   );

@@ -78,7 +78,7 @@ const rows = [
 ];
 
 
-export const PopulationTable = () => {
+export default function PopulationTable() {
     const classes = useStyles();
     const dispatch = useDispatch()
     const population = useSelector(state => state.posts)
