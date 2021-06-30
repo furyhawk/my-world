@@ -11,14 +11,16 @@ export const pokemonApi = createApi({
             query: (name) => `pokemon/${name}`,
         }),
         getPokemonAll: builder.query({
-            query: () => `pokemon/`,
-            providesTags: (result) =>
+            query: () => `pokemon/?offset=0&limit=50`,
+            transformResponse: (response) => response.results,
+            providesTags: 
+            // (result, error, id) => [{ type: 'Pokemon', id }],
+            (result) =>
                 result ?
                     [
-                        ...result.results.map(({ name }) => ({ type: 'Pokemon', name })),
-                        { type: 'Pokemon', id: 'LIST' }
+                        ...result.map(({ name }) => ({ type: 'Pokemon', name }))
                     ]
-                    : [{ type: 'Pokemon', id: 'LIST' }],
+                    : [],
         }),
     }),
 })
