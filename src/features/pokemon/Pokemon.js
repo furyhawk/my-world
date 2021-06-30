@@ -1,5 +1,22 @@
 import * as React from 'react'
-import { useGetPokemonByNameQuery } from '../../services/pokemon'
+import { useGetPokemonByNameQuery, useGetPokemonAllQuery } from '../../services/pokemon'
+
+export const PokemonCountStat = () => {
+  const { data } = useGetPokemonAllQuery()
+  console.log(data?.results)
+  if (!data) return null
+
+  return (
+    <>
+      <h3>Active Pokemon</h3>
+      <h3>{data?.results.length}</h3>
+
+      {data.results.map((poke, index) => (
+        <Pokemon key={index} name={poke.name} pollingInterval={0} />
+      ))}
+    </>
+  )
+}
 
 export const Pokemon = ({
   name,
@@ -11,6 +28,7 @@ export const Pokemon = ({
       pollingInterval,
     }
   )
+  console.log(data)
 
   return (
     <>

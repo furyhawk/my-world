@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css';
-import { Pokemon } from './features/pokemon/Pokemon'
+import { Pokemon, PokemonCountStat } from './features/pokemon/Pokemon'
 
 const pokemon = ['bulbasaur', 'pikachu', 'ditto', 'bulbasaur']
 
@@ -15,7 +15,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <select
+        <PokemonCountStat />
+        {/* <select
           onChange={(change) => setPollingInterval(Number(change.target.value))}
         >
           <option value={0}>Off</option>
@@ -24,7 +25,7 @@ function App() {
         </select>
         {pokemon.map((poke, index) => (
           <Pokemon key={index} name={poke} pollingInterval={pollingInterval} />
-        ))}
+        ))} */}
 
       </header>
     </div>
