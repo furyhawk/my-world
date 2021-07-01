@@ -12,7 +12,7 @@ export const PokemonCountStat = () => {
       {error ? (
         <>Oh no, there was an error</>
       ) : isLoading ? (
-        <>Loading...</>
+        <>Loading Pokemon...</>
       ) : data ? (
         <>
           <select
