@@ -1,6 +1,8 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+const pokemonPerPage = 50
+
 // Define a service using a base URL and expected endpoints
 export const pokemonApi = createApi({
     reducerPath: 'pokemonApi',
@@ -12,7 +14,7 @@ export const pokemonApi = createApi({
             providesTags: (result, error, id) => [{ type: 'Pokemon', id }],
         }),
         getPokemonAll: builder.query({
-            query: (page = 0) => `pokemon/?offset=${page*20}&limit=20`,
+            query: (page = 0) => `pokemon/?offset=${page * pokemonPerPage}&limit=${pokemonPerPage}`,
             transformResponse: (response) => response.results,
             providesTags:
                 (result) =>
